@@ -3,6 +3,7 @@ using System;
 using LiveChat.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LiveChat.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221119171805_AutoTimestampsAndKeys")]
+    partial class AutoTimestampsAndKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -31,10 +34,15 @@ namespace LiveChat.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Updated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
@@ -55,10 +63,15 @@ namespace LiveChat.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RoomName")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Updated")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");

@@ -1,20 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using LiveChat.Data;
+using LiveChat.Models;
 
-namespace LiveChat.Pages;
-
-public class IndexModel : PageModel
+namespace LiveChat.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class RoomsModel : PageModel
     {
-        _logger = logger;
-    }
+        private readonly ApplicationDbContext _context;
 
-    public void OnGet()
-    {
+        public RoomsModel(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
+        public IList<Room> Room { get;set; } = default!;
+
+        public async Task OnGetAsync()
+        {
+            if (_context.Rooms != null)
+            {
+                Room = await _context.Rooms.Include(room => room.Admin).ToListAsync();
+            }
+        }
     }
 }
-

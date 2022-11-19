@@ -1,7 +1,5 @@
 ﻿"use strict";
 
-const connection = new signalR.HubConnectionBuilder().withUrl("/ws/chat").build();
-
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", (user, message) => {

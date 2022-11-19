@@ -11,8 +11,8 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <None Remove="Hubs\" />
-    <None Remove="Pages\Index\" />
     <None Remove="Models\" />
+    <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -32,12 +32,12 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Hubs\" />
     <Folder Include="wwwroot\lib\signalr\" />
-    <Folder Include="Pages\Index\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,34 +1,47 @@
-﻿@page
-@model IndexModel
+@page
+@model LiveChat.Pages.RoomsModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Rooms";
 }
 
+<h1>Rooms</h1>
 
-<div class="container">
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-2">User</div>
-        <div class="col-4"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row">
-        <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="messageInput" /></div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-6">
-            <input type="button" id="sendButton" value="Send Message" />
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <hr />
-    </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <ul id="messagesList"></ul>
-    </div>
-</div>
+<p>
+    <a asp-page="CreateRoom">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Created at
+            </th>
+            <th>
+                Created by
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Room) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Admin.Email)
+            </td>
+            <td>
+                <a asp-page="./Room" asp-route-id="@item.ID">Join</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

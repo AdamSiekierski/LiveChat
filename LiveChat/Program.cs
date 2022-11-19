@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using LiveChat.Data;
 using LiveChat.Hubs;
 
@@ -23,6 +24,7 @@ public class Program
                     options.Password.RequireNonAlphanumeric = false;
                 })
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
         builder.Services.AddRazorPages();
         builder.Services.AddSignalR();
 
@@ -36,6 +38,14 @@ public class Program
         {
             app.UseExceptionHandler("/Error");
             app.UseHsts();
+        }
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<ApplicationDbContext>();
+            context.Database.EnsureCreated();
         }
 
         app.UseHttpsRedirection();
