@@ -1,5 +1,16 @@
 @page
 @model LiveChat.Pages.RoomModel
+@using Microsoft.AspNetCore.Identity;
+
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@section Scripts {
+    <script src="~/js/SignalRConn.js"></script>
+    <script src="~/js/Room.js"></script>
+}
 
 @{
     ViewData["Title"] = "Room";
@@ -32,3 +43,27 @@
 <div>
     <a asp-page="./Index">Back to List</a>
 </div>
+<hr />
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form id="messageForm" class="d-flex">
+        <input class="col" placeholder="Type a message..." name="message" />
+        <input type="hidden" value="@Html.Raw(Model.Room.ID)" name="roomId" id="roomId" />
+        <button type="submit" id="sendButton">Send</button>
+    </form>
+}
+else
+{
+    <p>Sign in or Log in to send messages</p>
+}
+
+<ul id="messageList">
+    @foreach (var message in Model.Messages)
+    {
+        <li>
+            <b>@Html.DisplayFor((model) => message.Author.Email): </b>
+            @Html.DisplayFor(model => message.Content)
+        </li>
+    }
+</ul>

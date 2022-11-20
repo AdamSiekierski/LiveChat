@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +8,15 @@ namespace LiveChat.Pages
 {
     public class RoomModel : PageModel
     {
-        private readonly LiveChat.Data.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public RoomModel(LiveChat.Data.ApplicationDbContext context)
+        public RoomModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
-      public Room Room { get; set; } = default!; 
+        public Room Room { get; set; } = default!;
+        public IList<Message> Messages { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,14 +26,22 @@ namespace LiveChat.Pages
             }
 
             var room = await _context.Rooms.Include(room => room.Admin).FirstOrDefaultAsync(m => m.ID == id);
+
             if (room == null)
             {
                 return NotFound();
             }
-            else 
-            {
-                Room = room;
-            }
+
+            var messages = await _context.Messages
+                                .Where(message => message.Room.ID == room.ID)
+                                .Include(message => message.Room)
+                                .Include(message => message.Author)
+                                .OrderByDescending(message => message.Created)
+                                .ToListAsync();
+
+            Room = room;
+            Messages = messages;
+
             return Page();
         }
     }

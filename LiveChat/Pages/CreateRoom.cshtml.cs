@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using LiveChat.Data;
 using LiveChat.Models;
+using LiveChat.Hubs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 
 namespace LiveChat.Pages
 {
@@ -10,11 +12,13 @@ namespace LiveChat.Pages
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHubContext<ChatHub> _chatHubContext;
 
-        public CreateRoomModel(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public CreateRoomModel(ApplicationDbContext context, UserManager<IdentityUser> userManager, IHubContext<ChatHub> chatHubContext)
         {
             _context = context;
             _userManager = userManager;
+            _chatHubContext = chatHubContext;
         }
 
         public IActionResult OnGet()
@@ -24,7 +28,6 @@ namespace LiveChat.Pages
 
         [BindProperty]
         public Room Room { get; set; } = default!;
-        
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -33,10 +36,6 @@ namespace LiveChat.Pages
             Room.Admin = user;
             Room.Created = DateTime.Now;
 
-            Console.WriteLine(user);
-            Console.WriteLine(Room);
-            Console.WriteLine(ModelState.IsValid);
-
             if (_context.Rooms == null || Room == null)
             {
                 return Page();
@@ -44,6 +43,8 @@ namespace LiveChat.Pages
 
             _context.Rooms.Add(Room);
             await _context.SaveChangesAsync();
+
+            await _chatHubContext.Clients.All.SendAsync("RoomCreated", Room);
 
             return RedirectToPage("./Index");
         }

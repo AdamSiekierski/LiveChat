@@ -1,9 +1,14 @@
 @page
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 @model LiveChat.Pages.RoomsModel
 
 @{
     ViewData["Title"] = "Rooms";
 }
+
 
 <h1>Rooms</h1>
 
@@ -27,21 +32,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Room) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Admin.Email)
-            </td>
-            <td>
-                <a asp-page="./Room" asp-route-id="@item.ID">Join</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        @foreach (var item in Model.Room)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Admin.Email)
+                </td>
+                <td>
+                    <a asp-page="./Room" asp-route-id="@item.ID">
+                        @if(SignInManager.IsSignedIn(User))
+                            {
+                                <span>Join</span>
+                            }
+                         else
+                            {
+                                <span>View</span>
+                            }        
+                    </a>
+                </td>
+             </tr>
+        }
+        </tbody>
+    </table>
