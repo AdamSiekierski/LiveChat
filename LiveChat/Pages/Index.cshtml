@@ -9,29 +9,37 @@
     ViewData["Title"] = "Rooms";
 }
 
+@section Scripts {
+    <script src="~/js/SignalRConn.js"></script>
+    <script src="~/js/Index.js"></script>
+}
 
-<h1>Rooms</h1>
 
-<p>
-    <a asp-page="CreateRoom">Create New</a>
-</p>
+<h1>Pokoje</h1>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <p>
+        <a asp-page="CreateRoom">Utwórz nowy</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                Name
+                Nazwa
             </th>
             <th>
-                Created at
+                Utworzono
             </th>
             <th>
-                Created by
+                Administrator
             </th>
             <th>
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="roomList">
         @foreach (var item in Model.Room)
         {
             <tr>
@@ -46,17 +54,17 @@
                 </td>
                 <td>
                     <a asp-page="./Room" asp-route-id="@item.ID">
-                        @if(SignInManager.IsSignedIn(User))
-                            {
-                                <span>Join</span>
-                            }
-                         else
-                            {
-                                <span>View</span>
-                            }        
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <span>Dołącz</span>
+                        }
+                        else
+                        {
+                            <span>Zobacz</span>
+                        }
                     </a>
                 </td>
-             </tr>
+            </tr>
         }
-        </tbody>
-    </table>
+    </tbody>
+</table>

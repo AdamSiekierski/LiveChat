@@ -19,9 +19,7 @@ document.getElementById("messageForm").addEventListener("submit", (e) => {
 
     const formData = new FormData(e.target);
 
-    console.log("dupa")
-    console.log(formData.get("message"));
-    console.log(formData.get("roomId"));
+    e.target.reset();
 
     connection.invoke("SendMessage", Number(formData.get("roomId")), formData.get("message"));
 });

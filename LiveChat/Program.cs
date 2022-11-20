@@ -25,7 +25,10 @@ public class Program
                 })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        builder.Services.AddRazorPages();
+        builder.Services.AddRazorPages(options =>
+        {
+            options.Conventions.AuthorizePage("/CreateRoom");
+        });
         builder.Services.AddSignalR();
 
         var app = builder.Build();

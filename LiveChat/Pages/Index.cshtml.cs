@@ -14,13 +14,13 @@ namespace LiveChat.Pages
             _context = context;
         }
 
-        public IList<Room> Room { get;set; } = default!;
+        public IList<Room> Room { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
             if (_context.Rooms != null)
             {
-                Room = await _context.Rooms.Include(room => room.Admin).ToListAsync();
+                Room = await _context.Rooms.Include(room => room.Admin).OrderByDescending(room => room.Created).ToListAsync();
             }
         }
     }

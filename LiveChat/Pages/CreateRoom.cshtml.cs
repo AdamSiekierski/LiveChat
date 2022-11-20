@@ -44,7 +44,7 @@ namespace LiveChat.Pages
             _context.Rooms.Add(Room);
             await _context.SaveChangesAsync();
 
-            await _chatHubContext.Clients.All.SendAsync("RoomCreated", Room);
+            await _chatHubContext.Clients.All.SendAsync("RoomCreated", Room.RoomName, Room.Created, Room.Admin.Email, Room.ID);
 
             return RedirectToPage("./Index");
         }
