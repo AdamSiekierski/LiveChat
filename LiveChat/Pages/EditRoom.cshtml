@@ -1,0 +1,40 @@
+@page
+@model LiveChat.Pages.EditRoomModel
+
+@{
+    ViewData["Title"] = "EditRoom";
+}
+
+<h1>Edytuj Pokój</h1>
+
+<h4>Pokój</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Room.ID" />
+            <div class="form-group">
+                <label asp-for="Room.RoomName" class="control-label">Nazwa pokoju</label>
+                <input asp-for="Room.RoomName" class="form-control" />
+                <span asp-validation-for="Room.RoomName" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="visibility: hidden;">
+                <label asp-for="Room.Created" class="control-label"></label>
+                <input asp-for="Room.Created" class="form-control" />
+                <span asp-validation-for="Room.Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zapisz zmiany" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Room" asp-route-id="@Html.Raw(Model.Room.ID)">Powróć do pokoju</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
