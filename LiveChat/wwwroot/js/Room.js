@@ -2,12 +2,43 @@
 
 document.getElementById("sendButton").disabled = true;
 
-connection.on("MessageSent", (author, content) => {
+function deleteMessage(e) {
+    const messageId = e.target.dataset.messageId;
+
+    console.log('dupa', Number(messageId), Number(roomId))
+
+    connection.invoke('DeleteMessage', Number(messageId), Number(window.roomId));
+}
+
+function createDeleteButtonHandlers() {
+    document.querySelectorAll('.deleteMessageButton').forEach((el) => {
+        el.removeEventListener('click', deleteMessage);
+
+        el.addEventListener('click', deleteMessage);
+    })
+}
+
+connection.on("MessageSent", (author, content, id) => {
     const li = document.createElement("li");
+
+    li.dataset.messageId = id;
+
+    if (author === window.userName || window.userName === window.roomAuthor) {
+        li.innerHTML = `<b>${author}</b>: ${content} <button class="deleteMessageButton" data-message-id="${id}">X</button>`;
+    } else {
+        li.innerHTML = `<b>${author}</b>: ${content}`;
+    }
+
     document.getElementById("messageList").prepend(li);
 
-    li.innerHTML = `<b>${author}</b>: ${content}`;
+    createDeleteButtonHandlers();
 });
+
+connection.on("MessageRemoved", (messageId) => {
+    const messageEl = document.querySelector(`li[data-message-id="${messageId}"]`);
+
+    messageEl?.remove();
+}) 
 
 connection.start().then(() => {
     document.getElementById("sendButton").disabled = false;
@@ -23,3 +54,5 @@ document.getElementById("messageForm").addEventListener("submit", (e) => {
 
     connection.invoke("SendMessage", Number(formData.get("roomId")), formData.get("message"));
 });
+
+createDeleteButtonHandlers();

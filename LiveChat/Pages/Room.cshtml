@@ -8,6 +8,10 @@
 
 
 @section Scripts {
+    <script>
+        window.roomAuthor = "@Html.Raw(Model.Room.Admin.UserName)";
+        window.roomId = "@Html.Raw(Model.Room.ID)";
+    </script>
     <script src="~/js/SignalRConn.js"></script>
     <script src="~/js/Room.js"></script>
 }
@@ -61,9 +65,13 @@ else
 <ul id="messageList">
     @foreach (var message in Model.Messages)
     {
-        <li>
+        <li data-message-id="@Html.Raw(message.ID)">
             <b>@Html.DisplayFor((model) => message.Author.Email): </b>
             @Html.DisplayFor(model => message.Content)
+            @if (message.Author.UserName == User.Identity.Name || Model.Room.Admin.UserName == User.Identity.Name)
+            {
+                <button class="deleteMessageButton" data-message-id="@Html.Raw(message.ID)">X</button>
+            }
         </li>
     }
 </ul>
